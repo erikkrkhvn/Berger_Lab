@@ -39,12 +39,22 @@ class file:
 				important = split_line[4:4+length]
 				for i in range(0,length):
 					total[i] += int(important[i])
-		print (total)
 		constant = list()
 		for k in range(0,length):
 			constant.append(float(int(norm_const)/float(total[k])))
-		print(constant)
-		
+		with open(self.filename, "r") as read_file:
+			random = read_file.readline()
+			with open(("norm_"+ self.filename), "w") as write_file:
+				write_file.write((random) +"\n") 
+				while True:
+					line = read_file.readline()
+					if line == "":
+						break
+					split = line.split()
+					for i in range (0, length):
+						split[i+4] = str(int(split[i+4])*constant[i])
+					write_file.write(("\t".join(split)) + "\n")	
+
 
 
 class difference(file):
