@@ -24,7 +24,28 @@ class file:
 			self.first_line = read_file.readline()
 
 	def normalize(self, norm_const):
-		norm = 1
+		parsed = self.first_line.split()
+		length = len(parsed) - 3
+		total = list()
+		for j in range (0,length):
+			total.append(0)
+		with open(self.filename, "r") as read_file:
+			random = read_file.readline()
+			while True:
+				line = read_file.readline()
+				if line == "":
+					break
+				split_line = line.split()
+				important = split_line[4:4+length]
+				for i in range(0,length):
+					total[i] += int(important[i])
+		print (total)
+		constant = list()
+		for k in range(0,length):
+			constant.append(float(int(norm_const)/float(total[k])))
+		print(constant)
+		
+
 
 class difference(file):
 
@@ -102,4 +123,4 @@ elif action == "q":
 	second.division()
 	second.while_loop()
 elif action == "n":
-	new_file.normalize(input1)
+	first.normalize(input1)
