@@ -44,22 +44,8 @@ class difference(file):
 			self.new_first.append(parsed[b])
 		
 	def subtraction(self):
-		with open(self.filename, "r") as read_file:
-			first_line = read_file.readline()
-			self.new_first.append(("%s-%s" % (self.name_col1, self.name_col2)))
-			with open(("Difference_%s_%s.txt" % (self.name_col1, self.name_col2)), "w") as write_file:
-				write_file.write(("\t".join(self.new_first)) +"\n") 
-				while True:
-					next_line = read_file.readline()
-					if next_line == "":
-						break
-					pieces = next_line.split()
-					new_value = int(pieces[(3+self.num1)]) - int(pieces[(3+self.num2)])
-					new_line = list()
-					for i in range(0,4):
-						new_line.append(pieces[i])
-					new_line.append(str(new_value))
-					write_file.write(("\t".join(new_line)) + "\n")
+		self.new_first.append(("%s-%s" % (self.name_col1, self.name_col2)))
+		self.type = "sub"
 
 	def division(self):
 		with open(self.filename, "r") as read_file:
@@ -85,13 +71,35 @@ class difference(file):
 					write_file.write(("\t".join(new_line)) + "\n")
 
 	def while_loop():
-		
+		with open(self.filename, "r") as read_file:
+			first_line = read_file.readline()
+			if self.type == "sub":
+				title = ("Difference_%s_%s.txt" % (self.name_col1, self.name_col2))
+			elif self.type =="div":
+				title = ("Division_%s_%s.txt" % (self.name_col1, self.name_col2))
+			with open(title, "w") as write_file:
+				write_file.write(("\t".join(self.new_first)) +"\n") 
+				while True:
+					next_line = read_file.readline()
+					if next_line == "":
+						break
+					pieces = next_line.split()
+					first_num = int(pieces[(3+self.num1)])
+					second_num = int(pieces[(3+self.num2)])
+					
+					new_line = list()
+					for i in range(0,4):
+						new_line.append(pieces[i])
+					new_line.append(str(new_value))
+					write_file.write(("\t".join(new_line)) + "\n")		
+
 
 
 first = file(filename)			
 if action == "s":
 	second = difference(first)
 	second.subtraction()
+	second.while_loop()
 elif action == "q":
 	second = difference(first)
 	second.division()
