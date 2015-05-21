@@ -14,9 +14,22 @@ def fileinput(filename, col1, col2):
 	with open(filename, "r") as read_file:
 		first_line = read_file.readline()
 		parsed = first_line.split()
-		name_col1 = parsed[(3+int(col1))]
-		name_col2 = parsed[(3+int(col2))]
+		num1 = int(col1)
+		num2 = int(col2)
+		name_col1 = parsed[(3+num1)]
+		name_col2 = parsed[(3+num2)]
 		with open(("Difference_%s_%s.txt" % (name_col1,name_col2)), "w") as write_file:
 			write_file.write(("		Chr	Start	End	%s" % ("%s-%s" % (name_col1,name_col2)))+"\n") 
-			
+			while True:
+				next_line = read_file.readline()
+				if next_line = "":
+					break
+				pieces = next_line.split()
+				new_value = int(pieces[(4+num1)]) - int(pieces[(4+num2)])
+				new_line = list(5)
+				for i in range(0,3):
+					new_line[i] = pieces[i]
+				new_line[4] = int(new_value)
+				write_file.write("\t".join(new_line))
+
 fileinput(filename, col1, col2)
