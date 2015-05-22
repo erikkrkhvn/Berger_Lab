@@ -4,17 +4,20 @@ filename = sys.argv[1]
 action = sys.argv[2]
 input1 = sys.argv[3]
 
+#If the second argument is n then you are normalizing the data. The thrid argument will then be the
+#constant you are normalizing too. It normilzes the data by adding all of the reads together and then multiplying each
+#read by a constant so that when you now add up all reads there will be 10000000 (ten 
+#million)
+
+#If the second argument is s then you are subtracting two columns from each other to find the difference.
+#thrid argument is the first column, and the fourth argument is the second column.
 #This program returns a file with name Difference_(name of col1)_(name of col2).txt
 #In this file the first column has number of the base pair interval, next column is the 
 #chromosome the interval is on, then the startof the interval, then the end of the 
-#interval, and then a column of the difference (col1 - col2). 
-#action designates if the operation on the two columns is division or subtraction
-#In division, if the denominator is then the value after division is simply the numerator.
+#interval, and then a column of the difference (col1 - col2).
 
-#This files' purpose is to normalize the data from ChIP-sep reads
-#It normilzes the data by adding all of the reads together and then multiplying each
-#read by a constant so that when you now add up all reads there will be 10000000 (ten 
-#million)
+#If the second argument is q then the operation one the two following arguments is division
+#In division, if the denominator is 0 then the value after division is simply the numerator.
 
 class file:
 
