@@ -25,12 +25,13 @@ class file:
 		self.filename = filename
 		with open(self.filename, "r") as read_file:
 			self.first_line = read_file.readline()
+			self.second_line = read_file.readline()
 
 	def normalize(self, norm_const):
 		parsed = self.first_line.split()
-		length = len(parsed) - 3
+		self.length = len(parsed) - 3
 		total = list()
-		for j in range (0,length):
+		for j in range (0,self.length):
 			total.append(0)
 		with open(self.filename, "r") as read_file:
 			random = read_file.readline()
@@ -39,11 +40,11 @@ class file:
 				if line == "":
 					break
 				split_line = line.split()
-				important = split_line[4:4+length]
-				for i in range(0,length):
+				important = split_line[4:4+self.length]
+				for i in range(0,self.length):
 					total[i] += int(important[i])
 		constant = list()
-		for k in range(0,length):
+		for k in range(0,self.length):
 			constant.append(float(int(norm_const)/float(total[k])))
 		with open(self.filename, "r") as read_file:
 			random = read_file.readline()
@@ -54,11 +55,61 @@ class file:
 					if line == "":
 						break
 					split = line.split()
-					for i in range (0, length):
+					for i in range (0, self.length):
 						split[i+4] = str(int(split[i+4])*constant[i])
 					write_file.write(("\t".join(split)) + "\n")	
 
+	def compact(self, comp_factor):
+		parsed = self.first_line.split()
+		self.length = len(parsed) - 3
+		secondline_parsed = self.second_line.split()
+		base_pair_diff = int(secondline_parsed[3]) - int(secondline_parsed[2]) + 1
+		self.num_of_lines = int(comp_factor)/int(base_pair_diff)
+		with open(self.filename, "r") as read_file:
+			random = read_file.readline()
+			with open((self.filename + "_comp_" + comp_factor), "w") as write_file:
+				write_file.write((random) +"\n") 
+				line_num = 0
+				while True:
+					returned = compact_helper(read_file)
+					group_total = returned[1]
+					boundaries = returned[2]
+					line_string = list()
+					line_string.append(line_num)
+					for i in range(0,3):
+						line_string.append(boundaries[i])
+					for j in range(0, self.length):
+						line_string.append(group_total[j])
+					write_file.write(("\t".join(split)) + "\n")
+					line_num += 1
 
+
+
+	def compact_helper(self, read_file):
+		returned_info = []
+		group_total = list()
+		boundaries = list()
+		for k in range (0,self.length):
+			group_total.append(0)
+		for j in range(0,num_of_lines):
+			line = read_file.readline()
+			if line == "":
+				break
+			split_line = line.split()
+			if j == 0:
+				chromosome_num = split_line[1]
+				boundaries.append(chromosome_num)
+				boundaries.append(split_line[2])
+			else:
+				if chromosome_num == split_line[1]:	
+					important = split_line[4:4+self.length]
+					for i in range(0,self.length):
+						group_total[i] += int(important[i])
+				else:
+					break
+		boundaries.append(split_line[3])
+		returned_info.append((group_total, boundaries))
+		return returned_info
 
 class difference(file):
 
@@ -137,3 +188,10 @@ elif action == "q":
 	second.while_loop()
 elif action == "n":
 	first.normalize(input1)
+elif action == "c":
+	if (int(input1)%10) != 0:
+		print "Please enter a multiple of 100 as compacting factor"
+		quit()
+	else:
+		first.compact(input1)
+
