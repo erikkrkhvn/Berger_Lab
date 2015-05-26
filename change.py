@@ -71,9 +71,10 @@ class file:
 				write_file.write((random) +"\n") 
 				line_num = 0
 				while True:
-					returned = compact_helper(read_file)
-					group_total = returned[1]
-					boundaries = returned[2]
+					returned = self.compact_helper(read_file)
+					group_total = returned[0]
+					boundaries = returned[1]
+					#when to stop the while loop?
 					line_string = list()
 					line_string.append(line_num)
 					for i in range(0,3):
@@ -91,7 +92,7 @@ class file:
 		boundaries = list()
 		for k in range (0,self.length):
 			group_total.append(0)
-		for j in range(0,num_of_lines):
+		for j in range(0,self.num_of_lines):
 			line = read_file.readline()
 			if line == "":
 				break
@@ -108,7 +109,7 @@ class file:
 				else:
 					break
 		boundaries.append(split_line[3])
-		returned_info.append((group_total, boundaries))
+		returned_info.append((group_total[:], boundaries[:]))
 		return returned_info
 
 class difference(file):
