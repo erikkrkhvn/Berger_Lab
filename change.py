@@ -67,49 +67,56 @@ class file:
 		self.num_of_lines = int(comp_factor)/int(base_pair_diff)
 		with open(self.filename, "r") as read_file:
 			random = read_file.readline()
-			with open((self.filename + "_comp_" + comp_factor), "w") as write_file:
+			with open(("comp_" + comp_factor + "_" + self.filename), "w") as write_file:
 				write_file.write((random) +"\n") 
 				line_num = 0
 				while True:
 					returned = self.compact_helper(read_file)
 					group_total = returned[0]
 					boundaries = returned[1]
-					#when to stop the while loop?
+					if (boundaries[3] != 0) and (boundaries[4] == 0):
+						break
 					line_string = list()
-					line_string.append(line_num)
+					line_string.append(str(line_num))
 					for i in range(0,3):
-						line_string.append(boundaries[i])
+						line_string.append(str(boundaries[i]))
 					for j in range(0, self.length):
-						line_string.append(group_total[j])
-					write_file.write(("\t".join(split)) + "\n")
+						line_string.append(str(group_total[j]))
+					write_file.write(("\t".join(line_string)) + "\n")
 					line_num += 1
-
-
 
 	def compact_helper(self, read_file):
 		returned_info = []
 		group_total = list()
 		boundaries = list()
+		split_line = ["","","",""]
+		self.previous_split_line = list()
+		for l in range (0,5):
+			boundaries.append(0)
 		for k in range (0,self.length):
 			group_total.append(0)
 		for j in range(0,self.num_of_lines):
 			line = read_file.readline()
 			if line == "":
+				boundaries[3] = 1
 				break
 			split_line = line.split()
 			if j == 0:
 				chromosome_num = split_line[1]
-				boundaries.append(chromosome_num)
-				boundaries.append(split_line[2])
+				boundaries[0] = chromosome_num
+				boundaries[1] = split_line[2]
+				boundaries[4] = 1
+			if chromosome_num == split_line[1]:	
+				important = split_line[4:4+self.length]
+				previous_split_line = split_line
+				for i in range(0,self.length):
+					group_total[i] += int(important[i])
 			else:
-				if chromosome_num == split_line[1]:	
-					important = split_line[4:4+self.length]
-					for i in range(0,self.length):
-						group_total[i] += int(important[i])
-				else:
-					break
-		boundaries.append(split_line[3])
-		returned_info.append((group_total[:], boundaries[:]))
+				split_line = previous_split_line
+				break
+		boundaries[2] = split_line[3]
+		returned_info.append(group_total)
+		returned_info.append(boundaries)
 		return returned_info
 
 class difference(file):
