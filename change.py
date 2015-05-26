@@ -19,6 +19,11 @@ input1 = sys.argv[3]
 #If the second argument is q then the operation one the two following arguments is division
 #In division, if the denominator is 0 then the value after division is simply the numerator.
 
+#If the second argument is a "c" then you can compact the file in the sense that you can group together 
+#groups of basepairs to get less resolution in basepair intervals. For example if you have as compaction 
+#factor 300 then the program will add together all of the reads of the intervals between 1 and 300 and all groups of 300
+#starting from there
+
 class file:
 
 	def __init__ (self, filename):
