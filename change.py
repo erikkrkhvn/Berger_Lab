@@ -65,6 +65,7 @@ class file:
 		secondline_parsed = self.second_line.split()
 		base_pair_diff = int(secondline_parsed[3]) - int(secondline_parsed[2]) + 1
 		self.num_of_lines = int(comp_factor)/int(base_pair_diff)
+		self.new_chrom_mode = 0
 		with open(self.filename, "r") as read_file:
 			random = read_file.readline()
 			with open(("comp_" + comp_factor + "_" + self.filename), "w") as write_file:
@@ -91,27 +92,42 @@ class file:
 		boundaries = list()
 		split_line = ["","","",""]
 		self.previous_split_line = list()
+		a = 0
 		for l in range (0,5):
 			boundaries.append(0)
 		for k in range (0,self.length):
 			group_total.append(0)
-		for j in range(0,self.num_of_lines):
+		if (self.new_chrom_mode != 0):
+			new_important = self.new_chrom[4:4+self.length]
+			for i in range(0,self.length):
+				group_total[i] += int(new_important[i])
+			self.new_chrom_mode = 0
+			a = 1
+		for j in range(0,self.num_of_lines-a):
 			line = read_file.readline()
 			if line == "":
 				boundaries[3] = 1
 				break
 			split_line = line.split()
 			if j == 0:
-				chromosome_num = split_line[1]
-				boundaries[0] = chromosome_num
-				boundaries[1] = split_line[2]
-				boundaries[4] = 1
+				if a == 0:
+					chromosome_num = split_line[1]
+					boundaries[0] = chromosome_num
+					boundaries[1] = split_line[2]
+					boundaries[4] = 1
+				else:
+					chromosome_num = split_line[1]
+					boundaries[0] = chromosome_num
+					boundaries[1] = self.new_chrom[2]
+					boundaries[4] = 1
 			if chromosome_num == split_line[1]:	
 				important = split_line[4:4+self.length]
 				previous_split_line = split_line
 				for i in range(0,self.length):
 					group_total[i] += int(important[i])
 			else:
+				self.new_chrom = split_line
+				self.new_chrom_mode = 1
 				split_line = previous_split_line
 				break
 		boundaries[2] = split_line[3]
