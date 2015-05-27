@@ -159,7 +159,7 @@ class difference(file):
 			self.new_first.append(parsed[b])
 		
 	def subtraction(self):
-		for k in range(0,(self.num_of_col/2),2):
+		for k in range(0,(self.num_of_col/2)+1,2):
 			self.new_first.append(("%s-%s" % (self.name_list[k], self.name_list[k+1])))
 		self.type = "sub"
 
@@ -184,7 +184,7 @@ class difference(file):
 						new_vals = list()
 						for j in range(0,self.num_of_col):
 							nums.append(int(pieces[3+self.col_list[j]]))
-						for k in range(0,(self.num_of_col/2),2):
+						for k in range(0,(self.num_of_col/2)+1,2):
 							new_vals.append(nums[k]-nums[k+1])
 						new_line = list()
 						for i in range(0,4):
@@ -205,7 +205,7 @@ class difference(file):
 						new_vals = list()
 						for j in range(0,self.num_of_col):
 							nums.append(int(pieces[3+self.col_list[j]]))
-						for k in range(0,(self.num_of_col/2),2):
+						for k in range(0,(self.num_of_col/2)+1,2):
 							if nums[k+1] == 0:
 								new_vals.append(nums[k])
 							else:
