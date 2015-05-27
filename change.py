@@ -74,7 +74,7 @@ class file:
 		with open(self.filename, "r") as read_file:
 			random = read_file.readline()
 			with open(("comp_" + comp_factor + "_" + self.filename), "w") as write_file:
-				write_file.write((random) +"\n") 
+				write_file.write((random)) 
 				line_num = 0
 				while True:
 					returned = self.compact_helper(read_file)
