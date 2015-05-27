@@ -146,30 +146,33 @@ class difference(file):
 		self.filename = file.filename
 		self.first_line = file.first_line
 		parsed = self.first_line.split()
-		col1 = input1
-		col2 = sys.argv[4]
-		self.num1 = int(col1)
-		self.num2 = int(col2)
-		self.name_col1 = parsed[(2+self.num1)]
-		self.name_col2 = parsed[(2+self.num2)]
+		self.num_of_col = int(input1) #number of columns you will using as input
+		self.col_list = list()
+		self.name_list = list()
+		for i in range(0,self.num_of_col):
+			self.col_list.append(int(sys.argv[i+4]))
+		for j in range(0,self.num_of_col):
+			self.name_list.append(parsed[2+self.col_list[j]])
 		self.new_first = list()
 		self.new_first.append("")
 		for b in range(0,3):
 			self.new_first.append(parsed[b])
 		
 	def subtraction(self):
-		self.new_first.append(("%s-%s" % (self.name_col1, self.name_col2)))
+		for k in range(0,(self.num_of_col/2),2):
+			self.new_first.append(("%s-%s" % (self.name_list[k], self.name_list[k+1])))
 		self.type = "sub"
 
 	def division(self):
-		self.new_first.append(("%s/%s" % (self.name_col1, self.name_col2)))
+		for k in range(0,(self.num_of_col/2),2):
+			self.new_first.append(("%s/%s" % (self.name_list[k], self.name_list[k+1])))
 		self.type = "div"
 
 	def while_loop(self):
 		with open(self.filename, "r") as read_file:
 			first_line = read_file.readline()
 			if self.type == "sub":
-				title = ("Difference_%s_%s.txt" % (self.name_col1, self.name_col2))
+				title = ("Difference_" + self.filename)
 				with open(title, "w") as write_file:
 					write_file.write(("\t".join(self.new_first)) +"\n") 
 					while True:
@@ -177,16 +180,20 @@ class difference(file):
 						if next_line == "":
 							break
 						pieces = next_line.split()
-						first_num = int(pieces[(3+self.num1)])
-						second_num = int(pieces[(3+self.num2)])
-						new_value = first_num - second_num
+						nums = list()
+						new_vals = list()
+						for j in range(0,self.num_of_col):
+							nums.append(int(pieces[3+self.col_list[j]]))
+						for k in range(0,(self.num_of_col/2),2):
+							new_vals.append(nums[k]-nums[k+1])
 						new_line = list()
 						for i in range(0,4):
 							new_line.append(pieces[i])
-						new_line.append(str(new_value))
+						for l in range(0,(self.num_of_col/2)):
+							new_line.append(str(new_vals[l]))
 						write_file.write(("\t".join(new_line)) + "\n")		
 			elif self.type =="div":
-				title = ("Division_%s_%s.txt" % (self.name_col1, self.name_col2))
+				title = ("Division_" + self.filename)
 				with open(title, "w") as write_file:
 					write_file.write(("\t".join(self.new_first)) +"\n")
 					while True:
@@ -194,16 +201,20 @@ class difference(file):
 						if next_line == "":
 							break
 						pieces = next_line.split()
-						first_num = int(pieces[(3+self.num1)])
-						second_num = int(pieces[(3+self.num2)])
-						if second_num == 0:
-							new_value = first_num
-						else:
-							new_value = float(first_num/float(second_num))
+						nums = list()
+						new_vals = list()
+						for j in range(0,self.num_of_col):
+							nums.append(int(pieces[3+self.col_list[j]]))
+						for k in range(0,(self.num_of_col/2),2):
+							if nums[k+1] == 0:
+								new_vals.append(nums[k])
+							else:
+								new_vals.append(float(first_num/float(second_num)))
 						new_line = list()
 						for i in range(0,4):
 							new_line.append(pieces[i])
-						new_line.append(str(new_value))
+						for l in range(0,(self.num_of_col/2)):
+							new_line.append(str(new_vals[l]))
 						write_file.write(("\t".join(new_line)) + "\n")
 
 first = file(filename)			
@@ -223,4 +234,3 @@ elif action == "c":
 		quit()
 	else:
 		first.compact(input1)
-
