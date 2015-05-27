@@ -164,7 +164,7 @@ class difference(file):
 		self.type = "sub"
 
 	def division(self):
-		for k in range(0,(self.num_of_col/2),2):
+		for k in range(0,(self.num_of_col/2)+1,2):
 			self.new_first.append(("%s/%s" % (self.name_list[k], self.name_list[k+1])))
 		self.type = "div"
 
