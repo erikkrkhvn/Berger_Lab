@@ -54,7 +54,7 @@ class file:
 		with open(self.filename, "r") as read_file:
 			random = read_file.readline()
 			with open(("norm_"+ self.filename), "w") as write_file:
-				write_file.write((random) +"\n") 
+				write_file.write((random)) 
 				while True:
 					line = read_file.readline()
 					if line == "":
