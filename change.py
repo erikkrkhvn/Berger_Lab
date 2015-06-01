@@ -183,7 +183,7 @@ class difference(file):
 						nums = list()
 						new_vals = list()
 						for j in range(0,self.num_of_col):
-							nums.append(int(pieces[3+self.col_list[j]]))
+							nums.append(float(pieces[3+self.col_list[j]]))
 						for k in range(0,(self.num_of_col/2)+1,2):
 							new_vals.append(nums[k]-nums[k+1])
 						new_line = list()
