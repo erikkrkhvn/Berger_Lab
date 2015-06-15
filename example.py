@@ -12,10 +12,19 @@ class file:
 
     def sub(self):
         self.num_of_col = int(input1)
-        
-        data[a]
+        self.col_list = list()
+        self.name_list = list()
+        for i in range(0,self.num_of_col):
+            self.col_list.append(int(sys.argv[i+4]))
+        for j in range(0,self.num_of_col):
+            self.name_list.append(parsed[2+self.col_list[j]])
+        for k in range(0,(self.num_of_col/2)+1,2):
+            a = self.name_list[k]
+            b = self.name_list[k+1]
+            new_name = a+"-"+b
+            self.data[new_name] = self.data.apply(subtraction(), axis = 1)
 
-    def subtraction(row):
+    def subtraction(row, col1, col2):
         return int(row['Third'] - row['First'])
 
 data['sub'] = data.apply(sub,axis = 1)
