@@ -16,22 +16,20 @@ class file:
         self.name_list = list()
         for i in range(0,self.num_of_col):
             self.col_list.append(int(sys.argv[i+4]))
+        orgi_name_list = list(self.data.columns.values)
         for j in range(0,self.num_of_col):
-            self.name_list.append(parsed[2+self.col_list[j]])
-        for k in range(0,(self.num_of_col/2)+1,2):
+            self.name_list.append(orgi_name_list[2+self.col_list[j]])
+        for k in range(0,int((self.num_of_col/2))+1,2):
             a = self.name_list[k]
             b = self.name_list[k+1]
             new_name = a+"-"+b
-            self.data[new_name] = self.data.apply(subtraction(), axis = 1)
+            self.data[new_name] = self.data.apply(lambda x: x[a] - x[b], axis = 1)
+            self.data = self.data.drop([a,b], axis = 1)
+        self.data.to_csv("sub_newfile.txt", sep = '\t', index = False)
 
-    def subtraction(row, col1, col2):
-        return int(row['Third'] - row['First'])
-
-data['sub'] = data.apply(sub,axis = 1)
-data = data.drop(['Third', 'First'], axis = 1)
-
-data.to_csv('new_file.txt', sep = '\t', index = False)
+    def norm(self):
+        
 
 first = file()
 if action == "s":
-    second = sub(first)
+    first.sub()
