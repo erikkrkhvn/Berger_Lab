@@ -34,7 +34,8 @@ class file:
         self.data.to_csv("norm_cKrox_100bp.txt", sep = '\t')
 
     def plot(self):
-        for i in range (1,3):
+        chomo_list = pd.unique(self.data['Chr'].ravel())
+        for i in range (1,len(chomo_list) + 1):
             a = 'chr' + str(i)
             chromo = self.data.drop(['End'], axis = 1)
             chromo = chromo.loc[self.data['Chr'] == (a)]
@@ -49,10 +50,16 @@ class file:
             new = self.data[self.data[name_list[i]] > self.data[name_list[i]].quantile(perc)].dropna()
         if way == 'd':
             new = self.data[self.data[name_list[i]] < self.data[name_list[i]].quantile(perc)].dropna()
+        for j in range(3, len(name_list)):
+            if j != i:
+                new = new.drop(name_list[j], axis = 1)
         new.to_csv("quan_" + sys.argv[3] + "_file.txt", sep = '\t')
 
-    def intersect(self):
+    def inter(self):
+        new = pd.unique(self.data['Chr'].ravel())
+        print (new)
         
+
 
 first = file()
 if action == "s":
@@ -65,3 +72,5 @@ if action == "qu":
     first.quan('u')
 if action == "qd":
     first.quan('d')
+if action =='i':
+    first.inter()
