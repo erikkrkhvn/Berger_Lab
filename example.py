@@ -11,7 +11,6 @@ class file:
     def __init__ (self, filename):
         self.filename = filename
         self.data = pd.read_csv(filename, delim_whitespace = True)
-        self.data.columns = ['Chr', 'Start', 'End', 'cKrox_CTL', 'cKrox_OIS', 'Input_CTL', 'Input_OIS']
 
     def sub(self):
         self.num_of_col = int(sys.argv[3])

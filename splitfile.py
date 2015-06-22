@@ -33,6 +33,7 @@ class splitfile:
                 o.write(line)
             o.close()
         os.remove('new123_' + chip)
+        
 
     def remove(self):
         count = True
