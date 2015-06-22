@@ -2,13 +2,15 @@ import pandas as pd
 import sys
 import matplotlib.pyplot as plt
 
-filename = sys.argv[1]
+input1 = sys.argv[1]
 action = sys.argv[2]
 
 class file:
 
-    def __init__ (self):
+    def __init__ (self, filename):
+        self.filename
         self.data = pd.read_csv(filename, delim_whitespace = True)
+        self.data.columns = ['Chr', 'Start', 'End', 'cKrox_CTL', 'cKrox_OIS', 'Input_CTL', 'Input_OIS']
 
     def sub(self):
         self.num_of_col = int(sys.argv[3])
@@ -25,13 +27,13 @@ class file:
             new_name = a+"-"+b
             self.data[new_name] = self.data.apply(lambda x: x[a] - x[b], axis = 1)
             self.data = self.data.drop([a,b], axis = 1)
-        self.data.to_csv("sub_newfile.txt", sep = '\t')
+        self.data.to_csv("sub_" + self.filename, sep = '\t')
 
     def norm(self):
         self.name_list = list(self.data.columns.values)
         for i in range(3, len(self.data.columns)):
             self.data[self.name_list[i]] = self.data[self.name_list[i]]*float(int(sys.argv[3])/self.data[self.name_list[i]].sum())
-        self.data.to_csv("norm_cKrox_100bp.txt", sep = '\t')
+        self.data.to_csv("norm_" + self.filename, sep = '\t')
 
     def plot(self):
         chomo_list = pd.unique(self.data['Chr'].ravel())
@@ -53,7 +55,7 @@ class file:
         for j in range(3, len(name_list)):
             if j != i:
                 new = new.drop(name_list[j], axis = 1)
-        new.to_csv("quan_" + sys.argv[3] + "_file.txt", sep = '\t')
+        new.to_csv("quan_" + sys.argv[3] + "_" + self.filename, sep = '\t')
 
     def inter(self):
         new = pd.unique(self.data['Chr'].ravel())
@@ -61,16 +63,25 @@ class file:
         
 
 
-first = file()
 if action == "s":
+    first = file(input1)
     first.sub()
 if action == "n":
+    first = file(input1)
     first.norm()
 if action == "p":
+    first = file(input1)
     first.plot()
 if action == "qu":
+    first = file(input1)
     first.quan('u')
 if action == "qd":
+    first = file(input1)
     first.quan('d')
 if action =='i':
+    first = file(input1)
     first.inter()
+if action = "sf":
+    for f in os.listdir(input1):
+        new = file(f)
+        new.sub()
