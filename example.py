@@ -1,6 +1,7 @@
 import pandas as pd 
 import sys
 import matplotlib.pyplot as plt
+import os
 
 input1 = sys.argv[1]
 action = sys.argv[2]
@@ -8,7 +9,7 @@ action = sys.argv[2]
 class file:
 
     def __init__ (self, filename):
-        self.filename
+        self.filename = filename
         self.data = pd.read_csv(filename, delim_whitespace = True)
         self.data.columns = ['Chr', 'Start', 'End', 'cKrox_CTL', 'cKrox_OIS', 'Input_CTL', 'Input_OIS']
 
@@ -81,7 +82,7 @@ if action == "qd":
 if action =='i':
     first = file(input1)
     first.inter()
-if action = "sf":
+if action == "sf":
     for f in os.listdir(input1):
         new = file(f)
         new.sub()
