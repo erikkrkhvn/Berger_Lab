@@ -1,5 +1,6 @@
 import sys
 import os
+import shutil
 
 class splitfile:
 
@@ -33,7 +34,16 @@ class splitfile:
                 o.write(line)
             o.close()
         os.remove('new123_' + chip)
-        
+        directory = os.getcwd()
+        os.mkdir("non_normal_chr")
+        correct_list = list()
+        correct_list.append('chrX_' + self.filename)
+        correct_list.append('chrY_' + self.filename)
+        for i in range(1,23):
+            correct_list.append('chr' + str(i) + '_' + self.filename)
+        for f in os.listdir(directory):
+            if (f in correct_list) == False:
+                shutil.move((directory + '\\' + f), (directory + '\\' + "non_normal_chr" + '\\' + f))   
 
     def remove(self):
         count = True
