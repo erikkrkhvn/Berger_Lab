@@ -1,6 +1,7 @@
 import pandas as pd 
 import sys
 import matplotlib.pyplot as plt
+import numpy as np
 import os
 from os import path
 import shutil
@@ -14,7 +15,10 @@ class file:
 
     def __init__ (self, filename):
         self.filename = filename
-        self.data = pd.read_csv(filename, delim_whitespace = True)
+        if action == "qlu" or action == "qld":
+            self.data = np.memmap(filename, mode = 'r')
+        else:
+            self.data = pd.read_csv(filename, delim_whitespace = True)
         self.total = list()
 
     def sub(self):
@@ -60,6 +64,18 @@ class file:
         for j in range(3, len(name_list)):
             if j != i:
                 new = new.drop(name_list[j], axis = 1)
+        new.to_csv("quan_" + sys.argv[3] + "_" + self.filename, sep = '\t')
+
+    def quan_big(self, way):
+        i = int(sys.argv[4]) + 2
+        perc = float(int(sys.argv[3])/100)
+        if way == 'u':
+            new = self.data[self.data[,i] > self.data[,i].quantile(perc)].dropna()
+        if way == 'd':
+            new = self.data[self.data[,i] < self.data[,i].quantile(perc)].dropna()
+        for j in range(3, len(name_list)):
+            if j != i:
+                new = np.delete(new, j, axis = 1)
         new.to_csv("quan_" + sys.argv[3] + "_" + self.filename, sep = '\t')
 
     def normf(self):
@@ -159,11 +175,16 @@ if action == "c":
     first = False
     with open('combined_file.txt', 'w') as outfile:
         filelist = (os.listdir(input1))
-        for f in sorted(filelist):
-            if f == 'combined_file.txt':
-                continue
-            if path.isfile(f):
-                with open(f, "r") as infile:
+        chrlist = list()
+        for i in range(1,23):
+            ele = [s for s in filelist if ("_chr" + str(i) + "_") in s]
+            chrlist.append(ele)
+        chrlist.append([s for s in filelist if ("chrX") in s])
+        chrlist.append([s for s in filelist if ("chrY") in s])
+        print(chrlist)
+        for f in range(0,24):
+            if path.isfile(chrlist[f][0]):
+                with open(chrlist[f][0], "r") as infile:
                     for line in infile:
                         if first:
                             first = False
@@ -171,3 +192,9 @@ if action == "c":
                             outfile.write(line)          
                 if first == False:
                     first = True
+if action == "qlu":
+    first = file(input1)
+    first.quan_big('u')
+if action == "qld":
+    first = file(input1)
+    first.quan_big('d')
