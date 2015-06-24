@@ -92,6 +92,14 @@ class filemani:
         length = len(toberemoved)
         if self.filename.startswith(toberemoved):
             os.rename(self.filename, (tobeadded + self.filename[length:]))
+
+    def combine(self):
+        filenames = ['file1.txt', 'file2.txt', ...]
+        with open('path/to/output/file', 'w') as outfile:
+            for fname in filenames:
+                with open(fname) as infile:
+                    for line in infile:
+                        outfile.write(line)
         
 
 
@@ -147,3 +155,19 @@ if action == "r":
         if path.isfile(f):
             new = filemani(f)
             new.rename()
+if action == "c":
+    first = False
+    with open('combined_file.txt', 'w') as outfile:
+        filelist = (os.listdir(input1))
+        for f in sorted(filelist):
+            if f == 'combined_file.txt':
+                continue
+            if path.isfile(f):
+                with open(f, "r") as infile:
+                    for line in infile:
+                        if first:
+                            first = False
+                        else:
+                            outfile.write(line)          
+                if first == False:
+                    first = True
