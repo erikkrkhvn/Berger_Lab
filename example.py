@@ -15,10 +15,10 @@ class file:
 
     def __init__ (self, filename):
         self.filename = filename
-        if action == "qlu" or action == "qld":
-            self.data = np.memmap(filename, mode = 'r')
-        else:
-            self.data = pd.read_csv(filename, delim_whitespace = True)
+        # if action == "qlu" or action == "qld":
+        #     self.data = np.load(filename, mmap_mode='r')
+        # else:
+        self.data = pd.read_csv(filename, delim_whitespace = True)
         self.total = list()
 
     def sub(self):
@@ -66,17 +66,21 @@ class file:
                 new = new.drop(name_list[j], axis = 1)
         new.to_csv("quan_" + sys.argv[3] + "_" + self.filename, sep = '\t')
 
-    def quan_big(self, way):
-        i = int(sys.argv[4]) + 2
-        perc = float(int(sys.argv[3])/100)
-        if way == 'u':
-            new = self.data[self.data[,i] > self.data[,i].quantile(perc)].dropna()
-        if way == 'd':
-            new = self.data[self.data[,i] < self.data[,i].quantile(perc)].dropna()
-        for j in range(3, len(name_list)):
-            if j != i:
-                new = np.delete(new, j, axis = 1)
-        new.to_csv("quan_" + sys.argv[3] + "_" + self.filename, sep = '\t')
+    # def quan_big(self, way):
+    #     i = int(sys.argv[4]) + 2
+    #     perc = float(int(sys.argv[3])/100)
+    #     print (self.data)
+    #     if way == 'u':
+    #         cut = np.percentile(self.data[self.data[i] > 0] , perc)
+    #     elif way == 'd':
+    #         cut = np.percentile(self.data[self.data[i] < 0][:i] , perc)
+    #     print (cut)
+    #     if way == 'u':
+    #         new = self.data[self.data[i] >= cut]
+    #     elif way == 'd':
+    #         new = self.data[self.data[i] <= cut][[0,1,2,i]]
+    #     print (new)
+    #     np.savetxt("quan_" + sys.argv[3] + "_" + self.filename, new, delimiter = '\t')
 
     def normf(self):
         self.name_list = list(self.data.columns.values)
@@ -93,9 +97,8 @@ class file:
             for i in range(0, len(self.data.columns) - 3):
                 total[i] = total[i] + self.data[self.name_list[i+3]].sum()
 
-    def inter(self):
-        new = pd.unique(self.data['Chr'].ravel())
-        print ('directory' + '\\' + 'f')
+    def com(self):
+        while 
 
 class filemani:
 
@@ -109,13 +112,6 @@ class filemani:
         if self.filename.startswith(toberemoved):
             os.rename(self.filename, (tobeadded + self.filename[length:]))
 
-    def combine(self):
-        filenames = ['file1.txt', 'file2.txt', ...]
-        with open('path/to/output/file', 'w') as outfile:
-            for fname in filenames:
-                with open(fname) as infile:
-                    for line in infile:
-                        outfile.write(line)
         
 
 
@@ -134,9 +130,9 @@ if action == "qu":
 if action == "qd":
     first = file(input1)
     first.quan('d')
-if action =='i':
+if action =='c':
     first = file(input1)
-    first.inter()
+    first.com()
 if action == "sf":
     for f in os.listdir(input1):
         if path.isfile(f):
