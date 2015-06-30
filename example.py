@@ -58,8 +58,12 @@ class file:
         i = int(sys.argv[4]) + 2
         perc = float(int(sys.argv[3])/100)
         if way == 'u':
+            if sys.argv[5] == 'o':
+                self.data = self.data[self.data[name_list[i]] > 0]
             new = self.data[self.data[name_list[i]] > self.data[name_list[i]].quantile(perc)].dropna()
         if way == 'd':
+            if sys.argv[5] == 'o':
+                self.data = self.data[self.data[name_list[i]] < 0]
             new = self.data[self.data[name_list[i]] < self.data[name_list[i]].quantile(perc)].dropna()
         for j in range(3, len(name_list)):
             if j != i:
@@ -97,8 +101,6 @@ class file:
             for i in range(0, len(self.data.columns) - 3):
                 total[i] = total[i] + self.data[self.name_list[i+3]].sum()
 
-    def com(self):
-        while 
 
 class filemani:
 
