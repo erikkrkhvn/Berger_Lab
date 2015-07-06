@@ -132,9 +132,6 @@ if action == "qu":
 if action == "qd":
     first = file(input1)
     first.quan('d')
-if action =='c':
-    first = file(input1)
-    first.com()
 if action == "sf":
     for f in os.listdir(input1):
         if path.isfile(f):

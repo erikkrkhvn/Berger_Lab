@@ -174,6 +174,61 @@ class splitfile:
         returned_info.append(boundaries)
         return returned_info
 
+    def one(self, col):
+        with open(self.filename,'r') as inFile:
+            with open(('one_' + self.filename),'w') as outFile:
+                for line in inFile:
+                    l = line.split()
+                    newline = l[col]
+                    outFile.write(newline + "\n")
+
+    def heatmap_fdr(self):
+        with open(self.filename,'r') as inFile:
+            with open(('ffdr10_' + self.filename),'w') as outFile:
+                for line in inFile:
+                    l = line.split('\t')
+                    if ("Annotation Cluster") in l[0]:
+                        outFile.write(("\t".join(l)))
+                        continue
+                    if l[0] == "Category":
+                        outFile.write(("\t".join(l)))
+                        continue
+                    if l[0] == '\n':
+                        outFile.write(("\t".join(l)))
+                        continue
+                    if float(l[12]) < 10.0:
+                        outFile.write(("\t".join(l)))
+                        continue
+        with open(('ffdr10_' + self.filename),'r') as inFile:
+            with open(('fdr10_' + self.filename),'w') as outFile:
+                totalline = ""
+                delete = False
+                for line in inFile:
+                    l = line.split('\t')
+                    if ("Annotation Cluster") in l[0]:
+                        totalline = ("\t".join(l))
+                        continue
+                    if l[0] == "Category":
+                        totalline += ("\t".join(l))
+                        delete = True
+                        continue
+                    if l[0] == '\n':
+                        if delete:
+                            delete = False
+                            totalline = ''
+                            continue
+                        else:
+                            outFile.write((totalline) + '\n') 
+                            totalline = ''
+                            continue
+                    if float(l[12]) < 10.0:
+                        totalline += ("\t".join(l))
+                        delete = False
+                        continue               
+        os.remove('ffdr10_' + self.filename)
+
+
+
 new_file = splitfile(filename)
 if action == 'c':
     if (int(sys.argv[3])%10) != 0:
@@ -185,3 +240,7 @@ if action == 'rb':
     new_file.recombine_bedgraph()
 if action == 'r':
     new_file.remove()
+if action == 'o':
+    new_file.one(int(sys.argv[3]))
+if action == 'h':
+    new_file.heatmap_fdr()
