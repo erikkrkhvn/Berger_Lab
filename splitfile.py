@@ -233,7 +233,15 @@ class splitfile:
                 for line in inFile:
                     new = line.replace('^M','\n')
                     outFile.write(new)
-
+        with open('corr' + self.filename, 'r') as inFile:
+            with open('n_' + self.filename, 'w') as outFile:
+                line = inFile.readline()
+                while line != "":
+                    line = line.replace('\n','')
+                    new = line + '\t' + '.' + '\t' + '0' + '\t' + '+' + '\n'
+                    outFile.write(new)
+                    line = inFile.readline()
+        os.remove('corr' + self.filename)
 
 
 new_file = splitfile(filename)
