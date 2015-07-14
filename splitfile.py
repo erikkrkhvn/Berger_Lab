@@ -227,6 +227,13 @@ class splitfile:
                         continue               
         os.remove('ffdr10_' + self.filename)
 
+    def new_line(self):
+        with open(self.filename, 'r') as inFile:
+            with open('corr' + self.filename, 'w') as outFile:
+                for line in inFile:
+                    new = line.replace('^M','\n')
+                    outFile.write(new)
+
 
 
 new_file = splitfile(filename)
@@ -244,3 +251,5 @@ if action == 'o':
     new_file.one(int(sys.argv[3]))
 if action == 'h':
     new_file.heatmap_fdr()
+if action == 'n':
+    new_file.new_line()
